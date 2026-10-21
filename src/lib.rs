@@ -98,8 +98,7 @@ impl zed::Extension for ProbeRsDebugger {
         println!("Configuration for DAP: {}", config.config);
 
         // TODO: What happens if both command and tcp connection are provided?
-
-        Ok(DebugAdapterBinary {
+        let binary = DebugAdapterBinary {
             command,
             arguments,
             envs: vec![],
@@ -110,7 +109,11 @@ impl zed::Extension for ProbeRsDebugger {
                 configuration: config.config,
                 request: StartDebuggingRequestArgumentsRequest::Launch,
             },
-        })
+        };
+
+        println!("Binary: {:?}", binary);
+
+        Ok(binary)
     }
 
     fn dap_request_kind(
@@ -119,6 +122,8 @@ impl zed::Extension for ProbeRsDebugger {
         config: serde_json::Value,
     ) -> Result<StartDebuggingRequestArgumentsRequest, String> {
         verify_adapter_name(&adapter_name)?;
+
+        println!("DAP request kind: {:?}", config);
 
         // There should be a request field to indicate if it should be launch or attach
         let Some(request_value) = config.get("request").and_then(|f| f.as_str()) else {

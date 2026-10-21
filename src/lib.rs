@@ -1,9 +1,9 @@
 use std::{net::Ipv4Addr, time::Duration};
 
 use zed_extension_api::{
-    self as zed, DebugAdapterBinary, DebugConfig, DebugRequest, DebugScenario, DebugTaskDefinition,
-    StartDebuggingRequestArguments, StartDebuggingRequestArgumentsRequest, TcpArguments, Worktree,
-    serde_json,
+    self as zed, serde_json, DebugAdapterBinary, DebugConfig, DebugRequest, DebugScenario,
+    DebugTaskDefinition, StartDebuggingRequestArguments, StartDebuggingRequestArgumentsRequest,
+    TcpArguments, Worktree,
 };
 
 const ADAPTER_NAME: &str = "probe-rs";
@@ -101,7 +101,7 @@ impl zed::Extension for ProbeRsDebugger {
         let binary = DebugAdapterBinary {
             command,
             arguments,
-            envs: vec![],
+            envs: vec![("CLICOLOR_FORCE".to_string(), "1".to_string())],
             cwd: None,
             connection,
             request_args: StartDebuggingRequestArguments {
